@@ -1,19 +1,21 @@
 # Use official PHP + Apache base image
 FROM php:8.2-apache
 
-# Enable Apache rewrite module (optional but recommended)
+# Enable rewrite module
 RUN a2enmod rewrite
 
-# Copy project files to Apache's document root
+# Set index.php as default directory index
+RUN echo "DirectoryIndex index.php" > /etc/apache2/conf-enabled/directoryindex.conf
+
+# Copy project files
 COPY . /var/www/html/
 
-# Give proper permissions
+# File permissions
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 
-# Expose port 80 (Render uses this internally)
+# Expose port 80
 EXPOSE 80
 
-# Start Apache server
+# Start Apache
 CMD ["apache2-foreground"]
-  
